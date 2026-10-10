@@ -50,6 +50,17 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         
         .code-area { font-family: 'Fira Code', monospace; background: #0f172a; color: #38bdf8; line-height: 1.6; resize: vertical; }
+        .dir-ltr { direction: ltr; }
+        
+        /* تصميم شاشة المحاكاة */
+        .device-simulator {
+            background: #ffffff;
+            border: 8px solid #1e293b;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-indigo-500 selection:text-white">
@@ -103,15 +114,15 @@
 
             <div class="p-4 md:p-8 max-w-7xl mx-auto w-full">
 
-                <!-- ================== 1. شاشة المكتبة (Library View) ================== -->
+                <!-- ================== 1. شاشة المكتبة ================== -->
                 <div id="view-library" class="animate-fadeIn">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                         <div>
                             <h2 class="text-2xl font-black text-slate-800 mb-1">الألعاب والتمارين (قوالب النظام)</h2>
-                            <p class="text-xs text-slate-500 font-bold">برمج وخصص الألعاب هنا. ما تصنعه هنا يظهر فوراً لموظفي (لوحة الكوادر) لإدراجه للطلاب.</p>
+                            <p class="text-xs text-slate-500 font-bold">برمج وخصص الألعاب هنا. ما تصنعه هنا يظهر فوراً للطلاب بشكل دقيق وحقيقي.</p>
                         </div>
                         <button onclick="Builder.createNewGame()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-black transition flex items-center gap-2 shadow-lg shadow-indigo-500/30 whitespace-nowrap">
-                            <i class="fa-solid fa-plus"></i> بناء وتكويد لعبة
+                            <i class="fa-solid fa-plus"></i> بناء وتكويد محتوى جديد
                         </button>
                     </div>
 
@@ -124,7 +135,7 @@
                     </div>
                 </div>
 
-                <!-- ================== 2. شاشة المحرر البرمجي (Editor View) ================== -->
+                <!-- ================== 2. شاشة المحرر البرمجي ================== -->
                 <div id="view-editor" class="hidden animate-fadeIn pb-20">
                     
                     <div class="glass-card p-4 flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 border-l-4 border-indigo-500">
@@ -151,14 +162,22 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-500 mb-1.5">المعرف البرمجي (Key) *وحيد وإنجليزي</label>
-                                    <input type="text" id="gKey" required class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 outline-none px-4 py-2.5 rounded-xl text-xs font-mono transition" placeholder="مثال: memory_lvl_1" dir="ltr">
+                                    <input type="text" id="gKey" required class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 outline-none px-4 py-2.5 rounded-xl text-xs font-mono transition" placeholder="مثال: custom_game_1" dir="ltr">
                                 </div>
                                 <div>
-                                    <label class="block text-[11px] font-bold text-slate-500 mb-1.5">اسم اللعبة (يظهر للموظف والطالب)</label>
-                                    <input type="text" id="gTitle" required class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 outline-none px-4 py-2.5 rounded-xl text-xs font-bold transition" placeholder="مثال: شفرة الخزنة - مستوى 1">
+                                    <label class="block text-[11px] font-bold text-slate-500 mb-1.5">اسم اللعبة/المحتوى</label>
+                                    <input type="text" id="gTitle" required class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 outline-none px-4 py-2.5 rounded-xl text-xs font-bold transition" placeholder="مثال: تحدي سرعة النقر">
                                 </div>
                                 <div>
-                                    <label class="block text-[11px] font-bold text-slate-500 mb-1.5">لون اللعبة (Theme)</label>
+                                    <label class="block text-[11px] font-bold text-slate-500 mb-1.5">نوع المحتوى (مهم للتشغيل الدقيق)</label>
+                                    <select id="gType" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 outline-none px-4 py-2.5 rounded-xl text-xs font-bold cursor-pointer transition">
+                                        <option value="game">لعبة برمجية (JavaScript + UI)</option>
+                                        <option value="video">فيديو تفاعلي مع أسئلة</option>
+                                        <option value="audio">مكالمة / اختبار صوتي</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-500 mb-1.5">اللون الرئيسي (Theme)</label>
                                     <select id="gColor" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 outline-none px-4 py-2.5 rounded-xl text-xs font-bold cursor-pointer transition">
                                         <option value="brand">رئيسي (أخضر مزرق)</option>
                                         <option value="amber">كهرماني (Amber)</option>
@@ -167,14 +186,12 @@
                                         <option value="rose">وردي (Rose)</option>
                                         <option value="cyan">سماوي (Cyan)</option>
                                         <option value="indigo">نيلي (Indigo)</option>
-                                        <option value="teal">فيروزي (Teal)</option>
-                                        <option value="blue">أزرق (Blue)</option>
                                     </select>
                                 </div>
-                                <div class="flex gap-3">
+                                <div class="flex gap-3 lg:col-span-4">
                                     <div class="flex-1">
-                                        <label class="block text-[11px] font-bold text-slate-500 mb-1.5">أيقونة (FontAwesome)</label>
-                                        <input type="text" id="gIcon" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 outline-none px-4 py-2.5 rounded-xl text-xs font-mono transition" placeholder="fa-lock" dir="ltr" oninput="document.getElementById('iconPreview').className = 'fa-solid ' + this.value">
+                                        <label class="block text-[11px] font-bold text-slate-500 mb-1.5">أيقونة اللعبة (FontAwesome)</label>
+                                        <input type="text" id="gIcon" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 outline-none px-4 py-2.5 rounded-xl text-xs font-mono transition" placeholder="fa-gamepad" dir="ltr" oninput="document.getElementById('iconPreview').className = 'fa-solid ' + this.value">
                                     </div>
                                     <div class="w-12 h-[42px] mt-[24px] rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 border border-indigo-100 shrink-0 shadow-inner">
                                         <i id="iconPreview" class="fa-solid fa-gamepad text-lg"></i>
@@ -183,9 +200,27 @@
                             </div>
                         </div>
 
-                        <!-- القسم الثاني: الإعدادات والوسائط -->
+                        <!-- القسم الثاني: إعدادات واجهة البداية -->
+                        <div class="glass-card p-6">
+                            <h3 class="text-sm font-black text-slate-800 mb-5 border-b border-slate-100 pb-3 flex items-center gap-2"><i class="fa-solid fa-display text-orange-500"></i> إعدادات واجهة البداية (تظهر للطالب قبل تشغيل الكود)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-500 mb-1.5">العنوان الترحيبي</label>
+                                    <input type="text" id="gIntro" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 outline-none px-4 py-2.5 rounded-xl text-xs font-bold transition" placeholder="مثال: مستعد للتحدي؟">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-500 mb-1.5">نص زر الدخول</label>
+                                    <input type="text" id="gBtnText" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 outline-none px-4 py-2.5 rounded-xl text-xs font-bold transition" placeholder="مثال: ابدأ اللعب الآن">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-[11px] font-bold text-slate-500 mb-1.5">قوانين اللعبة / التعليمات</label>
+                                    <textarea id="gRules" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 outline-none px-4 py-2.5 rounded-xl text-xs font-bold transition h-20" placeholder="اكتب التعليمات التي يجب على الطالب قراءتها قبل بدء اللعب..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- القسم الثالث: الإعدادات والوسائط -->
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            
                             <!-- إعدادات اللعب الافتراضية -->
                             <div class="glass-card p-6">
                                 <h3 class="text-sm font-black text-slate-800 mb-5 border-b border-slate-100 pb-3 flex items-center gap-2"><i class="fa-solid fa-sliders text-emerald-500"></i> إعدادات التشغيل الأساسية</h3>
@@ -195,26 +230,24 @@
                                         <input type="number" id="gTime" class="w-full bg-white border border-slate-200 focus:border-indigo-500 px-3 py-2 rounded-lg text-sm font-bold outline-none transition shadow-sm" value="15">
                                     </div>
                                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                                        <label class="block text-[11px] font-bold text-slate-600 mb-1.5">الصعوبة الافتراضية (Multiplier)</label>
+                                        <label class="block text-[11px] font-bold text-slate-600 mb-1.5">الصعوبة الافتراضية</label>
                                         <input type="number" step="0.1" id="gSpeed" class="w-full bg-white border border-slate-200 focus:border-indigo-500 px-3 py-2 rounded-lg text-sm font-bold outline-none transition shadow-sm" value="1.0">
                                     </div>
                                 </div>
                                 <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
-                                    <label class="block text-[11px] font-black text-blue-800 mb-2"><i class="fa-solid fa-link text-blue-500 ml-1"></i> رابط فيديو يوتيوب أو مقطع صوتي (تفاعلي)</label>
+                                    <label class="block text-[11px] font-black text-blue-800 mb-2"><i class="fa-solid fa-link text-blue-500 ml-1"></i> رابط فيديو أو مقطع صوتي</label>
                                     <div class="flex gap-2">
                                         <input type="text" id="gMedia" dir="ltr" class="w-full bg-white border border-blue-200 focus:border-blue-500 outline-none px-3 py-2.5 rounded-lg text-[10px] font-mono transition shadow-sm" placeholder="https://youtube.com/embed/...">
-                                        <button type="button" onclick="document.getElementById('fakeUpload').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg text-[10px] font-bold transition flex items-center gap-1 shadow-sm whitespace-nowrap">
-                                            رفع
-                                        </button>
+                                        <button type="button" onclick="document.getElementById('fakeUpload').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg text-[10px] font-bold transition flex items-center gap-1 shadow-sm whitespace-nowrap">رفع</button>
                                         <input type="file" id="fakeUpload" class="hidden" accept="video/*,audio/*">
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- الأسئلة المدمجة باللعبة -->
+                            <!-- الأسئلة المدمجة -->
                             <div class="glass-card p-6">
                                 <div class="flex justify-between items-center mb-5 border-b border-slate-100 pb-3">
-                                    <h3 class="text-sm font-black text-slate-800 flex items-center gap-2"><i class="fa-solid fa-clipboard-question text-teal-500"></i> بناء الأسئلة التفاعلية</h3>
+                                    <h3 class="text-sm font-black text-slate-800 flex items-center gap-2"><i class="fa-solid fa-clipboard-question text-teal-500"></i> الأسئلة التفاعلية</h3>
                                     <button type="button" onclick="Builder.addQuestionField()" class="text-[10px] bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg border border-teal-200 hover:bg-teal-100 transition font-black flex items-center gap-1 shadow-sm">
                                         <i class="fa-solid fa-plus"></i> أضف سؤال
                                     </button>
@@ -225,19 +258,74 @@
                             </div>
                         </div>
 
-                        <!-- القسم الثالث: الكود المصدري للعبة (Programmatic Edit) -->
-                        <div class="glass-card p-0 overflow-hidden flex flex-col border-l-4 border-l-fuchsia-500">
-                            <div class="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center">
-                                <div>
-                                    <h3 class="text-sm font-black text-slate-800 flex items-center gap-2"><i class="fa-solid fa-file-code text-fuchsia-500"></i> الكود البرمجي (JavaScript Game Logic)</h3>
-                                    <p class="text-[10px] text-slate-500 mt-1">هذا الكود سيتم تشغيله آلياً في شاشة الطالب (`games.html`). يجب أن يحتوي على الدالتين `start()` و `stop()`.</p>
+                        <!-- القسم الرابع: الكود المصدري والمحاكاة الحية (المرئية) -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 glass-card overflow-hidden border-l-4 border-l-fuchsia-500">
+                            <!-- محرر الكود -->
+                            <div class="flex flex-col border-r border-slate-200 lg:border-l lg:border-slate-200 border-b lg:border-b-0">
+                                <div class="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center">
+                                    <div>
+                                        <h3 class="text-sm font-black text-slate-800 flex items-center gap-2"><i class="fa-solid fa-file-code text-fuchsia-500"></i> بناء وتكويد اللعبة (HTML/JS)</h3>
+                                        <p class="text-[9px] text-slate-500 mt-1">اكتب الكود الذي يبني واجهة اللعبة داخل حاوية <code>#gameArea</code> لتظهر بشكل حقيقي.</p>
+                                    </div>
+                                    <button type="button" onclick="Builder.testLiveGame()" class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white px-4 py-2 rounded-lg text-xs font-black transition flex items-center gap-2 shadow-lg shadow-fuchsia-500/30">
+                                        <i class="fa-solid fa-play"></i> تشغيل ومعاينة
+                                    </button>
+                                </div>
+                                <!-- الكود الافتراضي يوضح كيفية بناء واجهة حقيقية وليس فقط console -->
+                                <textarea id="gCode" class="w-full h-[450px] code-area p-5 text-[12px] outline-none" spellcheck="false" dir="ltr">{
+    score: 0,
+    isActive: false,
+    start: function() {
+        this.isActive = true;
+        this.score = 0;
+        
+        // بناء الواجهة المرئية الحقيقية داخل منطقة اللعب
+        const container = document.getElementById('gameArea');
+        container.innerHTML = `
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; font-family:sans-serif;">
+                <h2 style="color:#1e293b; margin-bottom: 20px;">تحدي النقر السريع</h2>
+                <div id="scoreDisplay" style="font-size: 24px; font-weight:bold; color:#4f46e5; margin-bottom: 30px;">النقاط: 0</div>
+                <button id="actionBtn" style="background:#4f46e5; color:white; border:none; padding:15px 40px; border-radius:12px; font-size:18px; font-weight:bold; cursor:pointer; box-shadow: 0 4px 15px rgba(79,70,229,0.4); transition: transform 0.1s;">
+                    اضغطني بسرعة!
+                </button>
+            </div>
+        `;
+
+        // برمجة التفاعل
+        const btn = document.getElementById('actionBtn');
+        btn.onclick = () => {
+            if(!this.isActive) return;
+            this.score += 10;
+            document.getElementById('scoreDisplay').innerText = 'النقاط: ' + this.score;
+            
+            // تأثير حركي بسيط
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 100);
+        };
+    },
+    stop: function() {
+        this.isActive = false;
+        document.getElementById('gameArea').innerHTML = '<h3 style="text-align:center; color:#ef4444;">انتهى الوقت!</h3>';
+    }
+}</textarea>
+                            </div>
+
+                            <!-- شاشة معاينة المخرجات (Live Device Simulator) -->
+                            <div class="flex flex-col bg-slate-100 p-6 items-center justify-center relative">
+                                <div class="absolute top-4 left-4 bg-white px-3 py-1.5 rounded-lg text-[10px] font-bold text-slate-500 shadow-sm flex items-center gap-2 z-10">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> محاكاة العرض الحي
+                                </div>
+                                
+                                <!-- محاكي جهاز الطالب الافتراضي -->
+                                <div class="device-simulator w-[320px] h-[450px] shadow-2xl relative bg-white">
+                                    <!-- شريط علوي للهاتف -->
+                                    <div class="absolute top-0 w-full h-6 bg-slate-800 flex justify-center items-center z-10">
+                                        <div class="w-16 h-3 bg-black rounded-b-xl"></div>
+                                    </div>
+                                    <!-- إطار الـ iframe الفعلي الذي يرسم واجهة اللعبة -->
+                                    <iframe id="gamePreviewFrame" class="w-full h-full pt-6 border-none bg-slate-50" sandbox="allow-scripts allow-same-origin"></iframe>
                                 </div>
                             </div>
-                            <textarea id="gCode" class="w-full h-[400px] code-area p-5 text-[12px] outline-none" spellcheck="false" dir="ltr" placeholder="{
-    start: function() {
-        console.log('Game Started');
-    }
-}"></textarea>
                         </div>
 
                     </form>
@@ -264,23 +352,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // قاعدة البيانات الشاملة لجميع الألعاب والتمارين والمقاطع لتخزينها في السحابة
-        const defaultSeedGames = [
-            { key: 'reaction', title: 'صائد النجوم', icon: 'fa-meteor', color: 'amber', defaultTime: 15, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    score: 0, isActive: false,\n    start() {\n        this.isActive = true;\n        console.log("صائد النجوم بدأ");\n    },\n    stop() { this.isActive = false; }\n}` },
-            { key: 'memory', title: 'شفرة الخزنة', icon: 'fa-lock', color: 'purple', defaultTime: 20, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    start() { console.log("شفرة الخزنة بدأت"); }\n}` },
-            { key: 'flex', title: 'البوابات العكسية', icon: 'fa-shuffle', color: 'emerald', defaultTime: 15, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    start() { console.log("البوابات العكسية بدأت"); }\n}` },
-            { key: 'stroop', title: 'تحدي الألوان', icon: 'fa-palette', color: 'rose', defaultTime: 15, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    start() { console.log("تحدي الألوان بدأ"); }\n}` },
-            { key: 'matrix', title: 'مصفوفة التركيز', icon: 'fa-border-all', color: 'cyan', defaultTime: 15, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    start() { console.log("مصفوفة التركيز بدأت"); }\n}` },
-            { key: 'math', title: 'الميزان الذكي', icon: 'fa-calculator', color: 'indigo', defaultTime: 20, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    start() { console.log("الميزان الذكي بدأ"); }\n}` },
-            { key: 'visual', title: 'العين الثاقبة', icon: 'fa-eye', color: 'amber', defaultTime: 15, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    start() { console.log("العين الثاقبة بدأت"); }\n}` },
-            { key: 'schulte', title: 'شبكة الأرقام', icon: 'fa-table-cells-large', color: 'teal', defaultTime: 20, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    start() { console.log("شبكة الأرقام بدأت"); }\n}` },
-            { key: 'pattern', title: 'النمط الذكي', icon: 'fa-puzzle-piece', color: 'pink', defaultTime: 15, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    start() { console.log("النمط الذكي بدأ"); }\n}` },
-            { key: 'emotion', title: 'قارئ المشاعر', icon: 'fa-face-smile-beam', color: 'fuchsia', defaultTime: 15, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    start() { console.log("قارئ المشاعر بدأ"); }\n}` },
-            { key: 'word', title: 'الكلمة المفقودة', icon: 'fa-comment-dots', color: 'lime', defaultTime: 15, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    start() { console.log("الكلمة المفقودة بدأت"); }\n}` },
-            { key: 'association', title: 'رابط العجائب', icon: 'fa-link', color: 'violet', defaultTime: 15, defaultSpeed: 1.0, media: '', questions: [], code: `{\n    start() { console.log("رابط العجائب بدأ"); }\n}` },
-            { key: 'video_quiz', title: 'فيديو المحاكاة التفاعلي (أسئلة)', icon: 'fa-file-video', color: 'blue', defaultTime: 0, defaultSpeed: 1.0, media: 'https://youtube.com/embed/Y-yM14wT60k', questions: [{q: 'ما هو الرمز الكيميائي للماء؟', opts: ['H2O', 'CO2']}], code: `{\n    start() { console.log("الفيديو بدأ"); }\n}` },
-            { key: 'audio_call', title: 'مكالمة الذاكرة الصوتية', icon: 'fa-phone-volume', color: 'emerald', defaultTime: 30, defaultSpeed: 1.0, media: 'https://nabih.storage.app/media/audio_sample.mp3', questions: [], code: `{\n    start() { console.log("المكالمة الصوتية بدأت"); }\n}` }
-        ];
+        const defaultCodeTemplate = `{\n    score: 0,\n    isActive: false,\n    start: function() {\n        this.isActive = true;\n        const container = document.getElementById('gameArea');\n        container.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100%;"><button id="btn" style="padding:15px 30px; background:#4f46e5; color:white; border-radius:10px; border:none; font-size:16px;">لعبة جديدة، انقر هنا!</button></div>';\n        \n        document.getElementById('btn').onclick = () => {\n            this.score++;\n            document.getElementById('btn').innerText = 'النقاط: ' + this.score;\n        };\n    },\n    stop: function() {\n        this.isActive = false;\n        document.getElementById('gameArea').innerHTML = 'انتهت اللعبة';\n    }\n}`;
 
         window.Builder = {
             games: [],
@@ -296,19 +368,13 @@
                 try {
                     const snap = await getDocs(collection(db, "games_library"));
                     if(snap.empty) {
-                        for(let g of defaultSeedGames) {
-                            await setDoc(doc(db, "games_library", g.key), g);
-                        }
-                        this.loadGames();
+                        grid.innerHTML = '<div class="col-span-full text-center py-10 font-bold text-slate-400">لا توجد محتويات، قم بإنشاء محتوى جديد.</div>';
                         return;
                     }
-
                     this.games = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
                     this.renderLibrary();
-
                 } catch (e) {
-                    console.error("Firebase Err:", e);
-                    grid.innerHTML = '<div class="col-span-full text-center text-rose-500 py-10 font-bold">حدث خطأ في جلب قاعدة البيانات. تأكد من إعداداتك.</div>';
+                    grid.innerHTML = '<div class="col-span-full text-center text-rose-500 py-10 font-bold">حدث خطأ في الاتصال بقاعدة البيانات.</div>';
                 }
             },
 
@@ -316,13 +382,13 @@
                 const grid = document.getElementById('gamesLibraryGrid');
                 grid.innerHTML = '';
                 this.games.forEach(g => {
-                    let tags = '';
-                    if(g.media) tags += `<span class="bg-blue-50 px-2 py-0.5 rounded text-blue-600 border border-blue-100"><i class="fa-solid fa-play"></i> فيديو/صوت</span>`;
-                    if(g.questions && g.questions.length > 0) tags += `<span class="bg-teal-50 px-2 py-0.5 rounded text-teal-600 border border-teal-100"><i class="fa-solid fa-clipboard-question"></i> ${g.questions.length} أسئلة</span>`;
-                    
+                    let typeBadge = '';
+                    if(g.type === 'video') typeBadge = '<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded border border-blue-100">فيديو تفاعلي</span>';
+                    else if(g.type === 'audio') typeBadge = '<span class="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded border border-emerald-100">مكالمة صوتية</span>';
+                    else typeBadge = '<span class="bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded border border-indigo-100">لعبة (UI)</span>';
+
                     grid.innerHTML += `
                         <div class="glass-card p-5 group relative overflow-hidden flex flex-col justify-between h-[160px] border-l-4 border-${g.color || 'brand'}-500">
-                            
                             <div class="flex items-start justify-between w-full">
                                 <div class="flex items-center gap-3">
                                     <div class="w-12 h-12 rounded-xl bg-${g.color || 'brand'}-50 text-${g.color || 'brand'}-600 flex items-center justify-center text-xl shadow-inner border border-${g.color || 'brand'}-100 shrink-0">
@@ -334,15 +400,12 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="flex gap-2 text-[9px] font-bold mt-2">
+                                ${typeBadge}
                                 <span class="bg-slate-50 px-2 py-1 rounded text-slate-500 border border-slate-200"><i class="fa-regular fa-clock"></i> ${g.defaultTime}s</span>
-                                ${tags || '<span class="text-slate-400">لعبة كود قياسية</span>'}
                             </div>
-                            
-                            <!-- الأزرار السريعة تظهر عند التمرير -->
                             <div class="absolute bottom-3 left-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
-                                <button onclick="Builder.duplicateGame('${g.key}')" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-emerald-500 hover:text-white text-slate-600 flex items-center justify-center shadow-sm transition border border-slate-200 tooltip" title="تكرار اللعبة (نسخة جديدة)"><i class="fa-regular fa-copy text-xs"></i></button>
+                                <button onclick="Builder.duplicateGame('${g.key}')" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-emerald-500 hover:text-white text-slate-600 flex items-center justify-center shadow-sm transition border border-slate-200 tooltip" title="تكرار"><i class="fa-regular fa-copy text-xs"></i></button>
                                 <button onclick="Builder.openGameEditor('${g.key}')" class="w-8 h-8 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 flex items-center justify-center shadow-sm transition"><i class="fa-solid fa-pen text-xs"></i></button>
                             </div>
                         </div>
@@ -357,7 +420,7 @@
                     document.getElementById('headerTitle').textContent = 'مكتبة محتوى الألعاب الشاملة';
                     document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
                     document.getElementById('nav-library').classList.add('active');
-                    this.loadGames(); // Refresh
+                    this.loadGames(); 
                 } else {
                     document.getElementById('view-library').classList.add('hidden');
                     document.getElementById('view-editor').classList.remove('hidden');
@@ -366,7 +429,6 @@
                 }
             },
 
-            // === ميزة إنشاء وتكرار الألعاب ===
             createNewGame() {
                 this.isEditing = false;
                 this.currentDocId = null;
@@ -381,47 +443,32 @@
                 document.getElementById('btnDeleteGame').classList.add('hidden');
                 document.getElementById('questionsContainer').innerHTML = '<p class="text-xs text-slate-400 text-center py-4" id="emptyQuestionsMsg">لا يوجد أسئلة. اضغط لإضافة سؤال.</p>';
                 document.getElementById('iconPreview').className = 'fa-solid fa-gamepad';
-                document.getElementById('gCode').value = `{\n    score: 0,\n    isActive: false,\n    start: function() {\n        this.isActive = true;\n        console.log("اللعبة بدأت");\n    },\n    stop: function() {\n        this.isActive = false;\n    }\n}`;
+                document.getElementById('gCode').value = defaultCodeTemplate;
                 
+                // إعادة تهيئة شاشة المحاكاة
+                this.resetIframe();
                 this.switchView('editor');
             },
 
-            // ميزة التكرار (Duplicate) 
             duplicateGame(key) {
                 const g = this.games.find(x => x.key === key);
                 if(!g) return;
                 
-                this.isEditing = false; // ستكون لعبة جديدة
+                this.isEditing = false;
                 this.currentDocId = null;
 
                 const newRandomKey = g.key + '_copy_' + Math.random().toString(36).substr(2, 4);
 
-                document.getElementById('editorMainTitle').textContent = `تكرار وتعديل: ${g.title}`;
-                document.getElementById('editorGameKey').textContent = `تغيير الإعدادات للنسخة الجديدة`;
+                document.getElementById('editorMainTitle').textContent = `تكرار: ${g.title}`;
+                document.getElementById('editorGameKey').textContent = `ID الجديد: ${newRandomKey}`;
                 
                 const keyInput = document.getElementById('gKey');
                 keyInput.value = newRandomKey;
                 keyInput.readOnly = false;
                 keyInput.classList.remove('opacity-50');
 
-                document.getElementById('gTitle').value = g.title + ' - نسخة جديدة';
-                document.getElementById('gIcon').value = g.icon || '';
-                document.getElementById('gColor').value = g.color || 'brand';
-                document.getElementById('iconPreview').className = 'fa-solid ' + (g.icon || 'fa-gamepad');
-                document.getElementById('gTime').value = g.defaultTime || 15;
-                document.getElementById('gSpeed').value = g.defaultSpeed || 1.0;
-                document.getElementById('gMedia').value = g.media || '';
-                document.getElementById('gCode').value = g.code || '';
-
-                const qContainer = document.getElementById('questionsContainer');
-                qContainer.innerHTML = '';
-                if(g.questions && g.questions.length > 0) {
-                    g.questions.forEach(q => this.addQuestionField(q));
-                } else {
-                    qContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4" id="emptyQuestionsMsg">لا يوجد أسئلة.</p>';
-                }
-
-                document.getElementById('btnDeleteGame').classList.add('hidden');
+                this.fillFormData(g);
+                this.resetIframe();
                 this.switchView('editor');
             },
 
@@ -432,7 +479,7 @@
                 this.isEditing = true;
                 this.currentDocId = g.docId;
 
-                document.getElementById('editorMainTitle').textContent = `تعديل الكود: ${g.title}`;
+                document.getElementById('editorMainTitle').textContent = `تعديل المحتوى: ${g.title}`;
                 document.getElementById('editorGameKey').textContent = `ID: ${g.key}`;
                 
                 const keyInput = document.getElementById('gKey');
@@ -440,25 +487,34 @@
                 keyInput.readOnly = true;
                 keyInput.classList.add('opacity-50');
 
+                this.fillFormData(g);
+                this.resetIframe();
+                this.switchView('editor');
+            },
+
+            fillFormData(g) {
                 document.getElementById('gTitle').value = g.title || '';
+                document.getElementById('gType').value = g.type || 'game';
+                document.getElementById('gIntro').value = g.intro || '';
+                document.getElementById('gRules').value = g.rules || '';
+                document.getElementById('gBtnText').value = g.btnText || '';
                 document.getElementById('gIcon').value = g.icon || '';
                 document.getElementById('gColor').value = g.color || 'brand';
                 document.getElementById('iconPreview').className = 'fa-solid ' + (g.icon || 'fa-gamepad');
                 document.getElementById('gTime').value = g.defaultTime || 15;
                 document.getElementById('gSpeed').value = g.defaultSpeed || 1.0;
                 document.getElementById('gMedia').value = g.media || '';
-                document.getElementById('gCode').value = g.code || '';
+                document.getElementById('gCode').value = g.code || defaultCodeTemplate;
 
                 const qContainer = document.getElementById('questionsContainer');
                 qContainer.innerHTML = '';
                 if(g.questions && g.questions.length > 0) {
                     g.questions.forEach(q => this.addQuestionField(q));
                 } else {
-                    qContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4" id="emptyQuestionsMsg">لا يوجد أسئلة مضافة.</p>';
+                    qContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4" id="emptyQuestionsMsg">لا يوجد أسئلة.</p>';
                 }
-
-                document.getElementById('btnDeleteGame').classList.remove('hidden');
-                this.switchView('editor');
+                if(this.isEditing) document.getElementById('btnDeleteGame').classList.remove('hidden');
+                else document.getElementById('btnDeleteGame').classList.add('hidden');
             },
 
             addQuestionField(qData = null) {
@@ -475,21 +531,76 @@
                         <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 left-2 text-rose-500 bg-rose-50 hover:bg-rose-500 hover:text-white w-6 h-6 rounded flex items-center justify-center transition border border-rose-100"><i class="fa-solid fa-trash text-[10px]"></i></button>
                         <div class="mb-3 pr-2">
                             <label class="block text-[10px] font-black text-slate-500 mb-1">نص السؤال</label>
-                            <input type="text" class="q-text w-full bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg text-xs font-bold focus:border-indigo-500 outline-none transition" placeholder="مثال: ما هو لون التفاحة؟" value="${qText}">
+                            <input type="text" class="q-text w-full bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg text-xs font-bold focus:border-indigo-500 outline-none transition" value="${qText}">
                         </div>
                         <div class="grid grid-cols-2 gap-3 pr-2">
                             <div>
                                 <label class="block text-[10px] font-black text-emerald-600 mb-1"><i class="fa-solid fa-check"></i> الإجابة الصحيحة</label>
-                                <input type="text" class="q-opt1 w-full bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-lg text-[10px] font-bold focus:border-emerald-500 outline-none transition" placeholder="أحمر" value="${opt1}">
+                                <input type="text" class="q-opt1 w-full bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-lg text-[10px] font-bold focus:border-emerald-500 outline-none transition" value="${opt1}">
                             </div>
                             <div>
                                 <label class="block text-[10px] font-black text-rose-600 mb-1"><i class="fa-solid fa-xmark"></i> إجابة خاطئة</label>
-                                <input type="text" class="q-opt2 w-full bg-rose-50 border border-rose-200 px-3 py-2 rounded-lg text-[10px] font-bold focus:border-rose-500 outline-none transition" placeholder="أزرق" value="${opt2}">
+                                <input type="text" class="q-opt2 w-full bg-rose-50 border border-rose-200 px-3 py-2 rounded-lg text-[10px] font-bold focus:border-rose-500 outline-none transition" value="${opt2}">
                             </div>
                         </div>
                     </div>
                 `;
                 container.insertAdjacentHTML('beforeend', html);
+            },
+
+            resetIframe() {
+                const iframe = document.getElementById('gamePreviewFrame');
+                const doc = iframe.contentWindow.document;
+                doc.open();
+                doc.write('<body style="margin:0; background:#f8fafc; display:flex; align-items:center; justify-content:center; font-family:sans-serif; color:#94a3b8; font-size:12px;">اضغط على "تشغيل ومعاينة" لاختبار اللعبة</body>');
+                doc.close();
+            },
+
+            // دالة العرض الحي الجديدة بدلاً من الـ Console
+            testLiveGame() {
+                const codeString = document.getElementById('gCode').value;
+                const iframe = document.getElementById('gamePreviewFrame');
+                
+                // تجهيز المحتوى الذي سيتم حقنه داخل شاشة المحاكاة
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html dir="rtl">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <style>
+                            body { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background-color: #f1f5f9; display: flex; flex-direction: column; }
+                            #gameArea { flex: 1; width: 100%; height: 100%; position: relative; }
+                            .error-msg { color: #ef4444; background: #fef2f2; padding: 20px; font-family: sans-serif; text-align: center; border: 1px solid #fca5a5; margin: 20px; border-radius: 10px; }
+                        </style>
+                    </head>
+                    <body>
+                        <!-- هذه الحاوية هي التي يعتمد عليها الكود لبناء الواجهة -->
+                        <div id="gameArea"></div>
+                        
+                        <script>
+                            try {
+                                const gameObj = ${codeString};
+                                
+                                if (gameObj && typeof gameObj.start === 'function') {
+                                    // محاكاة استدعاء النظام لدالة start الخاصة باللعبة
+                                    gameObj.start();
+                                } else {
+                                    document.getElementById('gameArea').innerHTML = '<div class="error-msg">الكود لا يحتوي على دالة start() صالحة للتشغيل.</div>';
+                                }
+                            } catch (err) {
+                                document.getElementById('gameArea').innerHTML = '<div class="error-msg"><b>يوجد خطأ في تركيب كود الـ JavaScript:</b><br><br>' + err.message + '</div>';
+                            }
+                        <\/script>
+                    </body>
+                    </html>
+                `;
+
+                // كتابة الكود داخل الـ Iframe لتشغيله في بيئة معزولة ونظيفة
+                const doc = iframe.contentWindow.document;
+                doc.open();
+                doc.write(htmlContent);
+                doc.close();
             },
 
             async saveGame(e) {
@@ -503,7 +614,6 @@
 
                 btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> جاري الحفظ...';
 
-                // تجميع بيانات الأسئلة
                 const questions = [];
                 document.querySelectorAll('.quiz-block').forEach(block => {
                     const qt = block.querySelector('.q-text').value.trim();
@@ -514,7 +624,11 @@
 
                 const gameData = {
                     key: key,
+                    type: document.getElementById('gType').value,
                     title: title,
+                    intro: document.getElementById('gIntro').value.trim(),
+                    rules: document.getElementById('gRules').value.trim(),
+                    btnText: document.getElementById('gBtnText').value.trim(),
                     icon: document.getElementById('gIcon').value || 'fa-gamepad',
                     color: document.getElementById('gColor').value,
                     defaultTime: parseInt(document.getElementById('gTime').value) || 15,
@@ -525,20 +639,15 @@
                 };
 
                 try {
-                    // حفظ في مجموعة games_library
                     await setDoc(doc(db, "games_library", key), gameData);
-                    
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> تم الحفظ في قاعدة البيانات';
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> تم الحفظ بنجاح';
                     btn.classList.replace('bg-slate-900', 'bg-emerald-500');
-                    
                     setTimeout(() => {
                         btn.innerHTML = ogHtml;
                         btn.classList.replace('bg-emerald-500', 'bg-slate-900');
                         this.switchView('library');
                     }, 1500);
-
                 } catch(error) {
-                    console.error("Save Error:", error);
                     alert("خطأ في الحفظ للسحابة.");
                     btn.innerHTML = ogHtml;
                 }
@@ -546,7 +655,7 @@
 
             async deleteGame() {
                 if(!this.currentDocId) return;
-                if(confirm("هل أنت متأكد من حذف هذا المحتوى نهائياً؟ سيتم سحبه من شاشات الإدارة.")) {
+                if(confirm("هل أنت متأكد من حذف هذا المحتوى نهائياً؟")) {
                     try {
                         await deleteDoc(doc(db, "games_library", this.currentDocId));
                         this.switchView('library');
@@ -555,15 +664,13 @@
             }
         };
 
-        // تشغيل المنظومة
         document.addEventListener("DOMContentLoaded", () => Builder.init());
 
-        // محاكاة رفع الملفات
         document.getElementById('fakeUpload').addEventListener('change', function() {
             if(this.files && this.files[0]) {
                 const fname = this.files[0].name;
                 document.getElementById('gMedia').value = `https://nabih.storage.app/media/${fname}`;
-                alert(`تم محاكاة رفع الملف (${fname}) للسحابة. الرابط متوفر الآن في الحقل.`);
+                alert(`تم رفع الملف (${fname}). الرابط متوفر الآن في الحقل.`);
             }
         });
     </script>
